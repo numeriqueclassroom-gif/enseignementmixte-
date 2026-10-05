@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Enseignement mixte en anglais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout : bandeau clair et coloré avec la « partition » autonomie / visio et les bulles vertes et bleues de l'académie, onglets en pastilles, cartes douces */
+:root{
+  --bg:#f6f8fb; --surface:#ffffff; --ink:#1b2340; --muted:#5f6883; --line:#e3e8f1; --soft:#f0f3f9; --dot:#dfe5ef;
+  --hero-a:#dff5ea; --hero-b:#e3edff; --bubble-a:#7cc89a; --bubble-b:#74b9e0;
+  --auto:#16a06a; --auto-soft:#e1f6eb; --visio:#3d6bf0; --visio-soft:#e7edff; --sync:#e0682a; --sync-soft:#fff0e6;
+  --shadow:0 1px 2px rgba(27,35,64,.04),0 8px 24px rgba(27,35,64,.06);
+  --f-display:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:22px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1424; --surface:#171e33; --ink:#eaefff; --muted:#a2abc6; --line:#29324d; --soft:#1e2740; --dot:#1c2439;
+  --hero-a:#13322a; --hero-b:#192a55; --bubble-a:#2f7d55; --bubble-b:#2c6a95;
+  --auto:#4ade94; --auto-soft:#163127; --visio:#87a5ff; --visio-soft:#1d2a55; --sync:#ff9a5c; --sync-soft:#3a2416;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1424; --surface:#171e33; --ink:#eaefff; --muted:#a2abc6; --line:#29324d; --soft:#1e2740; --dot:#1c2439;
+  --hero-a:#13322a; --hero-b:#192a55; --bubble-a:#2f7d55; --bubble-b:#2c6a95;
+  --auto:#4ade94; --auto-soft:#163127; --visio:#87a5ff; --visio-soft:#1d2a55; --sync:#ff9a5c; --sync-soft:#3a2416;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background-color:var(--bg);background-image:radial-gradient(var(--dot) 1.2px,transparent 1.2px);background-size:22px 22px;color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.6;padding-inline:16px}
+.wrap{max-width:1060px;margin:0 auto;padding-block:24px 64px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.08;text-wrap:balance;margin:0;letter-spacing:-.02em}
+h1{font-size:clamp(2.3rem,6.5vw,4rem);font-weight:800}
+h2{font-size:clamp(1.55rem,3.6vw,2.2rem);font-weight:700}
+h3{font-size:1.18rem;font-weight:700;letter-spacing:-.01em}
+p{margin:0;max-width:66ch}
+a{color:var(--visio);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--sync);outline-offset:2px;border-radius:8px}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* Bandeau */
+.hero{background:linear-gradient(120deg,var(--hero-a),var(--hero-b));color:var(--ink);border-radius:32px;padding:clamp(28px,5vw,56px);display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.hero::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:var(--bubble-a);opacity:.55;left:-110px;bottom:-130px;pointer-events:none}
+.hero::after{content:"";position:absolute;width:200px;height:200px;border-radius:50%;background:var(--bubble-b);opacity:.55;right:-60px;top:-80px;pointer-events:none}
+.hero .eyebrow{color:var(--muted)}
+.hero .copy{display:grid;gap:16px;min-width:0;position:relative;z-index:1}
+.hero h1 span{color:var(--auto);position:relative;white-space:nowrap}
+.hero h1 span::after{content:"";position:absolute;left:0;right:0;bottom:.06em;height:.22em;background:var(--auto);opacity:.22;border-radius:6px;z-index:-1}
+.hero .lede{color:var(--muted);font-size:1.15rem;font-weight:600}
+.score{position:relative;z-index:1;display:grid;gap:10px;min-width:0;background:var(--surface);border-radius:24px;padding:20px;box-shadow:var(--shadow)}
+.score .row{display:grid;grid-template-columns:86px repeat(7,1fr);gap:6px;align-items:center}
+.score .lab{font-size:.8rem;font-weight:800;color:var(--muted)}
+.score .row.a .lab{color:var(--auto)} .score .row.v .lab{color:var(--visio)}
+.score .cell{height:30px;border-radius:999px;background:var(--soft)}
+.score .row.a .on{background:var(--auto)}
+.score .row.v .on{background:var(--visio)}
+.score .nums{display:grid;grid-template-columns:86px repeat(7,1fr);gap:6px;font-family:var(--f-mono);font-size:.68rem;color:var(--muted);text-align:center}
+.score .cap{font-size:.86rem;color:var(--muted)}
+@media (max-width:760px){.hero{grid-template-columns:1fr}.score .row,.score .nums{grid-template-columns:64px repeat(7,1fr)}}
+
+/* Onglets */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;padding-block:14px;margin-block:18px 26px;display:flex;justify-content:center}
+nav.tabs .scroller{overflow-x:auto;scrollbar-width:none;max-width:100%}
+nav.tabs ul{display:inline-flex;gap:4px;list-style:none;margin:0;padding:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;min-width:max-content;box-shadow:var(--shadow)}
+nav.tabs button{font:inherit;font-weight:700;font-size:.95rem;background:none;border:0;color:var(--muted);padding:9px 18px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s,transform .2s}
+nav.tabs button:hover{color:var(--ink);background:var(--soft)}
+nav.tabs button[aria-selected="true"]{background:linear-gradient(120deg,var(--auto),var(--visio));color:#fff}
+
+section.panel{display:grid;gap:30px}
+.intro{display:grid;gap:12px}
+.intro p{color:var(--muted);font-size:1.06rem}
+
+/* Pastilles */
+.tag{display:inline-flex;align-items:center;gap:7px;font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px;white-space:nowrap}
+.tag::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.tag.auto{color:var(--auto);background:var(--auto-soft)}
+.tag.visio{color:var(--visio);background:var(--visio-soft)}
+.tag.sync{color:var(--sync);background:var(--sync-soft)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+
+/* Blocs */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;display:grid;gap:12px;align-content:start;min-width:0}
+.box ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.box li{position:relative;padding-left:20px}
+.box li::before{content:"";position:absolute;left:2px;top:.62em;width:8px;height:2px;background:var(--muted);border-radius:2px}
+.box.auto{border-top:4px solid var(--auto)}
+.box.visio{border-top:4px solid var(--visio)}
+.callout{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--sync-soft);border-radius:var(--r);padding:18px 22px}
+.callout .ic{width:30px;height:30px;border-radius:50%;background:var(--sync);color:var(--bg);display:grid;place-items:center;font-family:var(--f-display);font-weight:800}
+.callout p{max-width:72ch}
+
+/* Rythme */
+.timeline{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.tl-head,.tl-row{display:grid;grid-template-columns:1fr 56px 1fr}
+.tl-head{border-bottom:1px solid var(--line);background:var(--soft)}
+.tl-head div{padding:12px 20px;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+.tl-head .a{color:var(--auto)} .tl-head .v{color:var(--visio)}
+.tl-row{position:relative}
+.tl-row .spine{position:relative;display:grid;place-items:center}
+.tl-row .spine::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;transform:translateX(-50%);background:var(--line)}
+.tl-row .spine b{position:relative;width:32px;height:32px;border-radius:50%;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-size:.8rem}
+.tl-row.is-a .spine b{border-color:var(--auto);color:var(--auto)}
+.tl-row.is-v .spine b{border-color:var(--visio);color:var(--visio)}
+.tl-row.is-b .spine b{border-color:var(--sync);color:var(--sync)}
+.slot{padding:12px 16px;min-width:0}
+.step{border-radius:14px;padding:14px 16px;display:grid;gap:4px}
+.slot.a .step{background:var(--auto-soft)}
+.slot.v .step{background:var(--visio-soft)}
+.step .k{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.step strong{font-family:var(--f-display);font-size:1.06rem}
+.step p{font-size:.94rem;color:var(--muted)}
+@media (max-width:680px){
+  .tl-head{display:none}
+  .tl-row{grid-template-columns:44px 1fr}
+  .tl-row .spine{grid-row:1/span 2;grid-column:1}
+  .slot{grid-column:2;padding:8px 14px 8px 0}
+  .slot:empty{display:none}
+}
+
+/* Outils */
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;display:grid;gap:12px;align-content:start;min-width:0;transition:border-color .15s,transform .15s}
+.tcard:hover{border-color:color-mix(in srgb,var(--visio) 40%,var(--line))}
+.tcard .top{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}
+.tcard .cond{font-size:.88rem;font-weight:600;color:var(--sync)}
+.tcard p{color:var(--muted);font-size:.97rem}
+.tcard ul{margin:0;padding-left:1.1em;font-size:.95rem;display:grid;gap:3px}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.links a{display:inline-flex;align-items:center;gap:6px;font-size:.88rem;font-weight:600;text-decoration:none;color:var(--ink);background:var(--soft);border:1px solid var(--line);padding:6px 12px;border-radius:999px;transition:background .15s,border-color .15s}
+.links a::after{content:"↗";font-size:.85em;color:var(--muted)}
+.links a:hover{border-color:var(--visio);background:var(--visio-soft)}
+.tcard.wide{grid-column:1/-1}
+.sub{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.sub>div{background:var(--soft);border-radius:14px;padding:16px;display:grid;gap:8px;align-content:start}
+.sub h4{margin:0;font-family:var(--f-display);font-size:1.05rem}
+.sub p{font-size:.93rem}
+.group-title{display:flex;align-items:baseline;gap:12px;margin-top:6px}
+.group-title h3{font-size:1.3rem}
+
+/* Exemples */
+.seqhead{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.seqhead .task{display:grid;gap:4px;background:var(--soft);border-radius:14px;padding:14px 16px;max-width:380px}
+.seqhead .task b{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+@media (max-width:720px){.seqhead{grid-template-columns:1fr}}
+.seq{display:grid;gap:12px}
+.phase{display:grid;grid-template-columns:200px 1fr;gap:22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;min-width:0}
+.phase .side{display:grid;gap:10px;align-content:start}
+.phase .side .name{font-family:var(--f-display);font-weight:700;font-size:1.12rem}
+.phase .body{display:grid;gap:12px;min-width:0}
+.phase .body p{font-size:.98rem}
+.trace{background:var(--soft);border-radius:12px;padding:14px 16px;font-size:.97rem;line-height:1.6}
+.trace b{color:var(--visio)}
+.rule{display:flex;flex-wrap:wrap;gap:8px}
+.rule span{font-family:var(--f-mono);font-size:.8rem;background:var(--ink);color:var(--bg);padding:5px 10px;border-radius:8px}
+.tool{font-size:.9rem;color:var(--muted)}
+.tool b{color:var(--ink)}
+.grid-eval{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.grid-eval div{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:.92rem}
+.grid-eval b{display:block;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-weight:500}
+@media (max-width:640px){.phase{grid-template-columns:1fr;gap:12px}}
+
+footer{margin-top:52px;font-size:.88rem;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}
+@media (prefers-reduced-motion:no-preference){section.panel{animation:rise .3s ease}@keyframes rise{from{opacity:.5;transform:translateY(6px)}to{opacity:1;transform:none}}}
+
+/* Habillage plus chaleureux */
+.box,.tcard,.phase,.seqhead,.timeline{border-color:transparent;box-shadow:var(--shadow)}
+.box.auto{border-top:0;background:linear-gradient(180deg,var(--auto-soft),var(--surface) 70%)}
+.box.visio{border-top:0;background:linear-gradient(180deg,var(--visio-soft),var(--surface) 70%)}
+.box li::before{width:8px;height:8px;top:.55em;border-radius:50%;background:var(--line)}
+.box.auto li::before{background:var(--auto)} .box.visio li::before{background:var(--visio)}
+@media (prefers-reduced-motion:no-preference){
+  .tcard,.phase,.box{transition:transform .2s ease,box-shadow .2s ease}
+  .tcard:hover,.phase:hover,.box:hover{transform:translateY(-3px)}
+}
+.tcard:hover{border-color:transparent}
+.tcard .top h3{font-size:1.3rem}
+.links a{background:var(--surface);border-color:var(--line);border-radius:12px}
+.links a:hover{background:var(--visio);border-color:var(--visio);color:#fff}
+.links a:hover::after{color:#fff}
+.sub>div{border-radius:18px}
+.phase .side{padding-right:4px}
+.phase:has(.side .tag.auto:only-child){background:linear-gradient(90deg,var(--auto-soft) 0,var(--surface) 240px)}
+.phase:has(.side .tag.visio:only-child){background:linear-gradient(90deg,var(--visio-soft) 0,var(--surface) 240px)}
+.phase:has(.side .tags){background:linear-gradient(90deg,var(--sync-soft) 0,var(--surface) 240px)}
+.rule span{background:linear-gradient(120deg,var(--auto),var(--visio));color:#fff;border-radius:999px;padding:5px 12px}
+.trace{border-left:4px solid var(--visio);border-radius:4px 14px 14px 4px}
+.callout{background:var(--sync-soft);border-radius:var(--r)}
+.callout .ic{color:#fff}
+.seqhead{background:linear-gradient(120deg,var(--hero-a),var(--hero-b))}
+.seqhead .task{background:var(--surface)}
+.step{border-radius:18px}
+.tl-row .spine b{background:var(--surface);font-weight:700}
+.tl-row.is-a .spine b{background:var(--auto);border-color:var(--auto);color:#fff}
+.tl-row.is-v .spine b{background:var(--visio);border-color:var(--visio);color:#fff}
+.tl-row.is-b .spine b{background:var(--sync);border-color:var(--sync);color:#fff}
+footer{text-align:center}
+
+/* Webinaire */
+.media{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+@media (max-width:760px){.media{grid-template-columns:1fr}}
+.poster{position:relative;display:grid;align-content:end;gap:16px;min-height:300px;padding:26px;border-radius:var(--r);text-decoration:none;color:#fff;overflow:hidden;box-shadow:var(--shadow);background:linear-gradient(140deg,#1f9d63,#2a6fd6)}
+.poster.alt{min-height:300px;background:linear-gradient(140deg,#3d6bf0,#7a54e6)}
+.poster::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.12);right:-70px;top:-80px}
+.poster .play{position:relative;width:64px;height:64px;border-radius:50%;background:#fff;color:#2a6fd6;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.poster.alt .play{color:#5b5fe8}
+.poster .ptext{position:relative;display:grid;gap:6px}
+.poster .eyebrow{color:rgba(255,255,255,.8)}
+.poster strong{font-family:var(--f-display);font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.15;text-wrap:balance}
+.poster .go{font-weight:800;font-size:.95rem}
+@media (prefers-reduced-motion:no-preference){.poster{transition:transform .2s ease}.poster:hover{transform:translateY(-3px)}.poster:hover .play{transform:scale(1.06)}.poster .play{transition:transform .2s ease}}
+.footlinks{display:flex;justify-content:center;gap:16px;margin-top:8px;flex-wrap:wrap}
+
+/* Intégrations */
+.embed{display:grid;gap:12px}
+.frame{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:var(--surface)}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+</style>
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header class="hero">
+  <div class="copy">
+    <span class="eyebrow">Anglais · Académie de Nice · Collège et lycée</span>
+    <h1>Enseignement <span>mixte</span> en anglais</h1>
+    <p class="lede">Alterner le travail des élèves en autonomie et les temps de classe en visio, sans perdre le fil de la séquence.</p>
+  </div>
+  <div class="score" aria-label="Exemple de rythme : sept étapes, dont quatre en autonomie, deux en visio et une partagée">
+    <div class="row a"><span class="lab">Autonomie</span><span class="cell on"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell on"></span></div>
+    <div class="row v"><span class="lab">Visio</span><span class="cell"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span></div>
+    <div class="nums"><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+    <p class="cap">Les sept étapes d'une séquence, réparties entre travail seul et temps ensemble.</p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections du guide">
+  <div class="scroller">
+  <ul role="tablist">
+    <li><button role="tab" id="t-principe" aria-controls="principe" aria-selected="true">Le principe</button></li>
+    <li><button role="tab" id="t-rythme" aria-controls="rythme" aria-selected="false">Le rythme</button></li>
+    <li><button role="tab" id="t-webinaire" aria-controls="webinaire" aria-selected="false">Webinaire</button></li>
+    <li><button role="tab" id="t-outils" aria-controls="outils" aria-selected="false">Outils</button></li>
+    <li><button role="tab" id="t-college" aria-controls="college" aria-selected="false">Exemple collège</button></li>
+    <li><button role="tab" id="t-lycee" aria-controls="lycee" aria-selected="false">Exemple lycée</button></li>
+  </ul>
+  </div>
+</nav>
+
+<!-- PRINCIPE -->
+<section class="panel" id="principe" role="tabpanel" aria-labelledby="t-principe">
+  <div class="intro">
+    <h2>Une séquence, deux temps qui se répondent</h2>
+    <p>L'enseignement mixte ne demande pas de tout réinventer. On garde la démarche de séquence que l'on connaît (anticipation, réception, construction du sens, réappropriation, production) et on place chaque étape là où elle est la plus efficace : seul, au rythme de l'élève, ou ensemble, avec le professeur.</p>
+  </div>
+
+  <div class="cols">
+    <div class="box auto">
+      <span class="tag auto" style="justify-self:start">En autonomie</span>
+      <h3>Ce que l'élève fait seul</h3>
+      <ul>
+        <li>Découvrir un document, faire des repérages</li>
+        <li>Déposer une proposition, une image, un mot</li>
+        <li>Suivre un parcours adapté à son niveau</li>
+        <li>Réviser le lexique et les structures</li>
+        <li>Préparer et enregistrer sa production</li>
+      </ul>
+    </div>
+    <div class="box visio">
+      <span class="tag visio" style="justify-self:start">En visio</span>
+      <h3>Ce qui se fait ensemble</h3>
+      <ul>
+        <li>Mettre en commun les productions des élèves</li>
+        <li>Construire le sens et la trace écrite</li>
+        <li>Faire induire la règle de grammaire</li>
+        <li>Prendre la parole, interagir</li>
+        <li>Lancer le travail suivant et expliquer les attendus</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="intro" style="margin-top:6px"><h2>Les priorités communes</h2></div>
+  <div class="cols">
+    <div class="box">
+      <span class="eyebrow">Ce que disent les textes</span>
+      <ul>
+        <li>Mettre en place des séquences brèves et des activités de réappropriation</li>
+        <li>Varier les thèmes et les modalités de travail</li>
+        <li>Favoriser l'interaction</li>
+        <li>Ancrer tout le travail dans l'aire culturelle concernée</li>
+      </ul>
+    </div>
+    <div class="box">
+      <span class="eyebrow">Les enjeux</span>
+      <ul>
+        <li>Identifier les difficultés et remédier</li>
+        <li>Consolider les acquis</li>
+        <li>Personnaliser les parcours, différencier</li>
+        <li>Faire acquérir et approfondir connaissances et compétences</li>
+      </ul>
+    </div>
+    <div class="box">
+      <span class="eyebrow">Les moyens</span>
+      <ul>
+        <li>Mutualiser, collaborer, échanger, entre professeurs comme entre élèves</li>
+        <li>Développer et faire reconnaître ses compétences numériques</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout"><span class="ic" aria-hidden="true">!</span><p>Le temps de visio est précieux : on le réserve à ce qui a besoin du groupe et du professeur. Tout ce qu'un élève peut faire seul avec une consigne claire passe en autonomie, et revient nourrir la visio suivante. Prévoyez toujours une version papier pour les élèves non équipés.</p></div>
+</section>
+
+<!-- RYTHME -->
+<section class="panel" id="rythme" role="tabpanel" aria-labelledby="t-rythme" hidden>
+  <div class="intro">
+    <h2>Le rythme d'une séquence</h2>
+    <p>Chaque travail en autonomie prépare un temps de visio, et chaque visio relance un nouveau travail en autonomie. Les étapes se lisent de haut en bas, dans l'ordre de la séquence.</p>
+  </div>
+
+  <div class="timeline" role="list">
+    <div class="tl-head" aria-hidden="true"><div class="a">En autonomie</div><div></div><div class="v">En visio</div></div>
+    <div class="tl-row is-a" role="listitem">
+      <div class="slot a"><div class="step"><span class="k">Anticipation</span><strong>Entrer dans le thème</strong><p>Une image, une courte vidéo, un titre. Chaque élève dépose une proposition (adjectif, slogan, image) sur un mur commun.</p></div></div>
+      <div class="spine"><b>1</b></div><div class="slot v"></div>
+    </div>
+    <div class="tl-row is-a" role="listitem">
+      <div class="slot a"><div class="step"><span class="k">Réception</span><strong>Comprendre le document</strong><p>Repérages guidés : ton, mots accentués, les 4 Ws. Des activités courtes vérifient la compréhension globale.</p></div></div>
+      <div class="spine"><b>2</b></div><div class="slot v"></div>
+    </div>
+    <div class="tl-row is-v" role="listitem">
+      <div class="slot a"></div><div class="spine"><b>3</b></div>
+      <div class="slot v"><div class="step"><span class="k">Construction du sens</span><strong>Mettre en commun, fixer la langue</strong><p>On part des productions déposées par les élèves, on construit la trace écrite et on fait induire la règle.</p></div></div>
+    </div>
+    <div class="tl-row is-a" role="listitem">
+      <div class="slot a"><div class="step"><span class="k">Réception différenciée</span><strong>Un parcours par élève</strong><p>Des supports de difficulté différente selon les besoins. L'élève prépare un support (frise, plans choisis) pour la visio suivante.</p></div></div>
+      <div class="spine"><b>4</b></div><div class="slot v"></div>
+    </div>
+    <div class="tl-row is-v" role="listitem">
+      <div class="slot a"></div><div class="spine"><b>5</b></div>
+      <div class="slot v"><div class="step"><span class="k">Enrichissement linguistique</span><strong>Prendre la parole</strong><p>Les élèves présentent leur travail : prise de parole en continu, mots de liaison, nouvelle structure.</p></div></div>
+    </div>
+    <div class="tl-row is-a" role="listitem">
+      <div class="slot a"><div class="step"><span class="k">Réappropriation</span><strong>Rebrasser</strong><p>Lexique et structures en contexte : quiz, exercices, ou activités créées par les élèves pour leurs camarades.</p></div></div>
+      <div class="spine"><b>6</b></div><div class="slot v"></div>
+    </div>
+    <div class="tl-row is-b" role="listitem">
+      <div class="slot a"><div class="step"><span class="k">Production</span><strong>Réaliser la tâche finale</strong><p>L'élève prépare et enregistre sa production, grille d'évaluation en main dès le départ.</p></div></div>
+      <div class="spine"><b>7</b></div>
+      <div class="slot v"><div class="step"><span class="k">Production</span><strong>Présenter, évaluer</strong><p>Les attendus sont expliqués en visio, puis les productions sont présentées et commentées.</p></div></div>
+    </div>
+  </div>
+
+  <div class="callout"><span class="ic" aria-hidden="true">!</span><p>Une règle simple pour ne perdre personne : chaque visio se termine par la consigne du prochain travail en autonomie, et chaque travail en autonomie se termine par un dépôt que l'on retrouvera en visio.</p></div>
+</section>
+
+<!-- WEBINAIRE -->
+<section class="panel" id="webinaire" role="tabpanel" aria-labelledby="t-webinaire" hidden>
+  <div class="intro">
+    <h2>Le webinaire</h2>
+    <p>La captation du webinaire « Objectifs et modalités de l'enseignement mixte en LVE anglais » et le support interactif qui l'accompagne.</p>
+  </div>
+  <div class="embed">
+    <h3>Captation du webinaire</h3>
+    <div class="frame"><iframe src="https://www.youtube.com/embed/qWwq9dlLPME?si=b5juGXpq6-4PL7Ck" title="Objectifs et modalités de l'enseignement mixte en LVE anglais" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+  </div>
+  <div class="embed">
+    <h3>Support interactif</h3>
+    <div class="frame"><iframe src="https://view.genially.com/5ee1f6d8f260380d8364f2f2" title="Support au webinaire : Anglais, enseignement mixte" frameborder="0" allowfullscreen></iframe></div>
+    <p class="tool"><a href="https://view.genially.com/5ee1f6d8f260380d8364f2f2" target="_blank" rel="noopener">Ouvrir le Genially en plein écran ↗</a></p>
+  </div>
+  <div class="callout"><span class="ic" aria-hidden="true">i</span><p>Le support Genially présente encore les outils de l'époque : pour vos séquences, référez-vous plutôt à l'onglet Outils de cette page.</p></div>
+</section>
+
+<!-- OUTILS -->
+<section class="panel" id="outils" role="tabpanel" aria-labelledby="t-outils" hidden>
+  <div class="intro">
+    <h2>Les outils institutionnels</h2>
+    <p>Des outils respectueux des données des élèves, dont la plupart sont déjà à votre disposition. Inutile de tout utiliser : partez de ce que vous et vos élèves connaissez déjà.</p>
+  </div>
+
+  <div class="tools">
+    <article class="tcard">
+      <div class="top"><h3>Classe virtuelle</h3><div class="tags"><span class="tag visio">Visio</span></div></div>
+      <p>Le service de visioconférence pour les temps de classe à distance : mise en commun, construction du sens, prises de parole.</p>
+      <ul>
+        <li>Partage d'écran pour afficher les productions des élèves</li>
+        <li>Prise de parole, conversation écrite, sondages rapides</li>
+      </ul>
+      <div class="links">
+        <a href="https://portail.apps.education.fr" target="_blank" rel="noopener">Classe virtuelle (apps.education)</a>
+      </div>
+    </article>
+
+    <article class="tcard">
+      <div class="top"><h3>Pronote</h3><div class="tags"><span class="tag auto">Autonomie</span><span class="tag sync">Synchrone</span></div></div>
+      <p>L'outil de vie scolaire, connu des élèves et des familles : c'est là que tout commence et que l'on retrouve le fil.</p>
+      <ul>
+        <li>Préparer le travail à faire avec liens et consignes</li>
+        <li>Échanger avec les élèves</li>
+        <li>Annoncer les horaires et le lien des visios</li>
+      </ul>
+      <p class="tool">Accès par l'ENT de votre établissement.</p>
+    </article>
+
+    <article class="tcard">
+      <div class="top"><h3>apps.education.fr</h3><div class="tags"><span class="tag auto">Autonomie</span><span class="tag sync">Synchrone</span></div></div>
+      <p class="cond">Si vous avez déjà un compte et que vous utilisez déjà ces services.</p>
+      <p>Les services numériques de l'Éducation nationale pour les personnels : stockage et partage de fichiers, dépôt de vidéos, outils collaboratifs.</p>
+      <div class="links">
+        <a href="https://portail.apps.education.fr" target="_blank" rel="noopener">Portail apps.education</a>
+        <a href="https://podeduc.apps.education.fr/region-academique-paca/" target="_blank" rel="noopener">Pod région académique PACA</a>
+      </div>
+    </article>
+
+    <article class="tcard">
+      <div class="top"><h3>Outils de l'établissement</h3><div class="tags"><span class="tag auto">Autonomie</span></div></div>
+      <p class="cond">Pour celles et ceux qui s'en servent déjà.</p>
+      <div class="sub">
+        <div><h4>Éléa</h4><p>Parcours, activités, parcours différenciés.</p>
+          <div class="links"><a href="https://www.pedagogie.ac-nice.fr/drane/elea/" target="_blank" rel="noopener">Éléa, DRANE Nice</a><a href="https://eduscol.education.fr/4184/la-plateforme-d-apprentissage-elea" target="_blank" rel="noopener">Éduscol</a></div></div>
+        <div><h4>Pearltrees</h4><p>Organiser et partager les ressources de la séquence.</p>
+          <div class="links"><a href="https://www.pearltrees.com" target="_blank" rel="noopener">Pearltrees</a></div></div>
+      </div>
+    </article>
+
+    <article class="tcard wide">
+      <div class="top"><h3>La Digitale</h3><div class="tags"><span class="tag auto">Autonomie</span><span class="tag visio">Visio</span></div></div>
+      <p class="cond">Si vous en avez l'habitude.</p>
+      <p>Des outils libres et sans publicité pour animer la visio à partir de ce que les élèves ont produit en autonomie. Utilisez uniquement les outils avec modération : vous validez chaque contribution avant qu'elle soit visible par la classe.</p>
+      <div class="sub">
+        <div><h4>Digipad</h4><p>Murs collaboratifs. Les élèves y déposent images, textes ou liens en autonomie, et le mur devient le support de la visio.</p>
+          <div class="links"><a href="https://digipad.app" target="_blank" rel="noopener">digipad.app</a></div></div>
+        <div><h4>Digistorm</h4><p>Nuage de mots collaboratif, remue-méninges, questionnaire. Idéal pour l'anticipation, la réception et la réappropriation.</p>
+          <div class="links"><a href="https://digistorm.app" target="_blank" rel="noopener">digistorm.app</a></div></div>
+        <div><h4>Tous les outils</h4><p>La liste complète des applications de La Digitale.</p>
+          <div class="links"><a href="https://ladigitale.dev" target="_blank" rel="noopener">ladigitale.dev</a></div></div>
+      </div>
+    </article>
+
+    <article class="tcard wide">
+      <div class="top"><h3>Se former et être accompagné</h3></div>
+      <div class="links">
+        <a href="https://www.pedagogie.ac-nice.fr/dane/" target="_blank" rel="noopener">DRANE, site de Nice</a>
+        <a href="https://www.pedagogie.ac-nice.fr/dane/s-informer/apps-education-des-outils-numeriques-pour-tous-les-personnels" target="_blank" rel="noopener">apps.education, page DRANE</a>
+        <a href="https://magistere.education.fr" target="_blank" rel="noopener">M@gistère</a>
+        <a href="https://eduscol.education.fr" target="_blank" rel="noopener">Éduscol</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- COLLEGE -->
+<section class="panel" id="college" role="tabpanel" aria-labelledby="t-college" hidden>
+  <div class="seqhead">
+    <div class="intro"><span class="eyebrow">Parcours collège · cycle 4, niveau A2</span><h2>Movie Madness</h2></div>
+    <div class="task"><b>Tâche finale</b>Réaliser la critique vidéo d'un film que l'on a aimé, avec quelques éléments de biographie de son acteur ou de son actrice préféré(e).</div>
+  </div>
+
+  <div class="seq">
+    <div class="phase">
+      <div class="side"><span class="name">Anticipation</span><span class="tag auto" style="justify-self:start">Autonomie</span></div>
+      <div class="body">
+        <p>À partir d'une courte vidéo d'une avant-première, chaque élève trouve une image où règne la même atmosphère et la décrit avec un adjectif de son choix, différent de ceux déjà proposés.</p>
+        <p class="tool"><b>Avec :</b> un mur Digipad modéré.</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Réception</span><span class="tag auto" style="justify-self:start">Autonomie</span></div>
+      <div class="body">
+        <p>Une critique de film en vidéo. D'abord repérer le ton, les emojis, les scènes de film ; ensuite relever les mots accentués pour une compréhension plus fine.</p>
+        <p class="tool"><b>Avec :</b> un nuage de mots Digistorm, qui servira d'appui en visio.</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Construction du sens</span><span class="tag visio" style="justify-self:start">Visio</span></div>
+      <div class="body">
+        <p>Le nuage de mots sert de point de départ à une trace écrite, puis à l'induction de la règle.</p>
+        <div class="trace">Grace thinks that <i>Bad Boys for Life</i> is <b>such a</b> great movie: she is really excited as it is <b>so</b> good. It contains <b>such</b> incredible action scenes, and the jokes are <b>so</b> funny!</div>
+        <div class="rule"><span>SO + ADJ</span><span>SUCH + A (+ ADJ) + singular NOUN</span><span>SUCH (+ ADJ) + plural NOUN</span></div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Réception différenciée</span><span class="tag auto" style="justify-self:start">Autonomie</span></div>
+      <div class="body">
+        <p>Quatre courtes biographies d'acteurs, attribuées selon leur difficulté. Repérages : titre et illustration, auteur, dates. L'élève réalise ensuite une frise chronologique, enrichie par une petite recherche personnelle.</p>
+        <p class="tool"><b>Avec :</b> un parcours Éléa, ou le travail à faire dans Pronote.</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Enrichissement linguistique</span><span class="tag visio" style="justify-self:start">Visio</span></div>
+      <div class="body">
+        <p>La frise devient le support d'une prise de parole en continu : informations au prétérit, coordonnées par des mots de liaison.</p>
+        <div class="trace">James Franco <b>was born</b> in 1978. When he <b>graduated</b> high school, he <b>first thought</b> he would become a marine biologist, <b>however</b> he <b>dropped out</b> of university in 1996 to take up acting. He <b>got</b> his lead role as James Dean five years later.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Réappropriation</span><span class="tag auto" style="justify-self:start">Autonomie</span></div>
+      <div class="body">
+        <p>Rebrasser le lexique de l'enthousiasme et le prétérit : liste de vocabulaire, exercices en contexte, ou questionnaires créés par les élèves pour leurs camarades.</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Production</span><div class="tags"><span class="tag auto">Autonomie</span><span class="tag visio">Visio</span></div></div>
+      <div class="body">
+        <p>La grille d'évaluation est présentée en visio avant le travail. Les élèves réalisent leur critique vidéo en autonomie, puis les productions sont partagées.</p>
+        <div class="grid-eval">
+          <div><b>Contenu</b>Aspects positifs du film, vie de l'acteur en quelques points clés, cohérence grâce aux mots de liaison</div>
+          <div><b>Langue</b>Adjectifs mélioratifs, structures de haut degré (so, such), prétérit</div>
+          <div><b>Phonologie</b>Ton enthousiaste, syllabes accentuées bien marquées</div>
+          <div><b>Numérique</b>Esthétique de la vidéo, images et emojis au service du propos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LYCEE -->
+<section class="panel" id="lycee" role="tabpanel" aria-labelledby="t-lycee" hidden>
+  <div class="seqhead">
+    <div class="intro"><span class="eyebrow">Parcours lycée · niveau B1</span><h2>Go Green</h2></div>
+    <div class="task"><b>Tâche finale</b>Une vidéo sous-titrée qui prend le contrepied de celle étudiée : parodie du minimaliste (le « maximaliste ») ou portrait de l'écologiste parfait.</div>
+  </div>
+
+  <div class="seq">
+    <div class="phase">
+      <div class="side"><span class="name">Anticipation</span><span class="tag auto" style="justify-self:start">Autonomie</span></div>
+      <div class="body">
+        <p>Une photo de manifestation pour le climat dont on a effacé le slogan de la banderole. Chaque élève propose un slogan, puis vote pour son préféré parmi toutes les propositions, en justifiant son choix.</p>
+        <p class="tool"><b>Avec :</b> le remue-méninges de Digistorm, ou un Digipad modéré.</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Réception</span><span class="tag auto" style="justify-self:start">Autonomie</span></div>
+      <div class="body">
+        <p>Un article de presse en ligne sur les grèves scolaires pour le climat. Repérages guidés autour des 4 Ws (lieux, acteurs, dates, actions) pour une compréhension plus autonome.</p>
+        <p class="tool"><b>Avec :</b> une activité Éléa si vous l'utilisez déjà.</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Construction du sens</span><span class="tag visio" style="justify-self:start">Visio</span></div>
+      <div class="body">
+        <p><strong>Phase 1.</strong> Trace écrite et induction de la valeur de bilan du present perfect.</p>
+        <div class="trace">Greta Thunberg's influence <b>has spread</b> throughout Europe. She <b>has inspired</b> other students to mimic her behaviour and go on school strikes. They, in turn, <b>have led</b> protests in various countries.</div>
+        <div class="rule"><span>Present result of past actions</span><span>HAVE + V-EN</span></div>
+        <p><strong>Phase 2.</strong> Anticiper les vidéos suivantes à partir de leurs titres : repérer le mot clé (minimalist, environmentalist), ce qu'on s'attend à voir (un appartement, donc des objets ; « I am », donc une personne), et la mention « parody » qui annonce un contrepied.</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Réception différenciée</span><span class="tag auto" style="justify-self:start">Autonomie</span></div>
+      <div class="body">
+        <p>Une vidéo au choix parmi deux. À l'aide de plans choisis dans la vidéo, l'élève donne sa définition du minimaliste ou de l'écologiste, dans un court montage commenté ou sous-titré.</p>
+        <p class="tool"><b>Avec :</b> dépôt des vidéos sur apps.education (Nuage ou Pod).</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Enrichissement linguistique</span><span class="tag visio" style="justify-self:start">Visio</span></div>
+      <div class="body">
+        <p>Les élèves dressent la checklist du parfait minimaliste (ou du piètre écologiste) avec OUGHT TO + V.</p>
+        <div class="trace">The perfect minimalist <b>ought not to possess</b> appliances like an electric kettle or a coffee maker. They <b>ought to own</b> few pieces of crockery. Their workspace <b>ought to be</b> clutter-free and almost empty.</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Réappropriation</span><span class="tag auto" style="justify-self:start">Autonomie</span></div>
+      <div class="body">
+        <p>Questionnaires et exercices en contexte sur le lexique et les structures, individuellement ou en créant des questions pour les camarades.</p>
+        <p class="tool"><b>Avec :</b> le questionnaire Digistorm, réutilisable en direct pendant la visio.</p>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="side"><span class="name">Production</span><div class="tags"><span class="tag auto">Autonomie</span><span class="tag visio">Visio</span></div></div>
+      <div class="body">
+        <p>Grille présentée en visio, vidéo sous-titrée réalisée en autonomie, visionnage collectif à la fin.</p>
+        <div class="grid-eval">
+          <div><b>Contenu</b>Causes de l'émergence du concept, aspects du concept, ton adapté (humour, sérieux)</div>
+          <div><b>Langue</b>Bilan avec le present perfect, obligation morale avec OUGHT TO + V</div>
+          <div><b>Numérique</b>Esthétique de la vidéo, timing et cohérence des sous-titres</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>D'après le support de webinaire « Anglais, enseignement mixte » de l'Académie de Nice, actualisé pour les outils.
+  <div class="footlinks"><a href="https://view.genially.com/5ee1f6d8f260380d8364f2f2" target="_blank" rel="noopener">Support Genially ↗</a><a href="https://www.youtube.com/watch?v=qWwq9dlLPME" target="_blank" rel="noopener">Vidéo du webinaire ↗</a></div>
+</footer>
+</div>
+
+<script>
+(function(){
+  const tabs=[...document.querySelectorAll('[role="tab"]')];
+  function show(id,push){
+    tabs.forEach(t=>{
+      const on=t.getAttribute('aria-controls')===id;
+      t.setAttribute('aria-selected',on);
+      t.tabIndex=on?0:-1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden=!on;
+    });
+    if(push){try{history.replaceState(null,'','#'+id)}catch(e){}}
+  }
+  tabs.forEach((t,i)=>{
+    t.addEventListener('click',()=>{
+      show(t.getAttribute('aria-controls'),true);
+      const nav=document.querySelector('nav.tabs');
+      if(nav.getBoundingClientRect().top<=1)nav.scrollIntoView({behavior:'smooth'});
+    });
+    t.addEventListener('keydown',e=>{
+      if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+      const n=tabs[(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length];
+      n.focus();n.click();
+    });
+  });
+  const h=location.hash.slice(1);
+  if(h&&tabs.some(t=>t.getAttribute('aria-controls')===h))show(h,false);
+})();
+</script>
+
+</body>
+</html>
